@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  board: MyText
+  moves: MyText
+
+two:
+  board: MyText
+  moves: MyText

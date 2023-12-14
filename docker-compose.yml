@@ -1,0 +1,15 @@
+version: '3'
+services:
+  api:
+    build: ./shogi-api
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./shogi-api:/shogi-api
+    ports:
+      - "3000:3000"
+  frontend:
+    build: ./shogi-frontend
+    volumes:
+      - ./shogi-frontend/src:/shogi-frontend/src
+    ports:
+      - "3001:3000"
