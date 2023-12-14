@@ -15,7 +15,7 @@ class ChatgptController < ApplicationController
 
     request.body = {
       prompt: "あなたは将棋の解説者です。将棋の手順は以下の通り。: #{moves}。これに対して解説者っぽく解説をしてください。解説する内容は、戦型と囲いの名前と最後の手の解説と次の手の予想です。",
-      max_tokens: 500
+      max_tokens: 400
     }.to_json
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
