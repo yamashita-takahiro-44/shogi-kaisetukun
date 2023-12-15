@@ -28,7 +28,7 @@ const GameBoard = () => {
 
   const handleExplain = () => {
     setIsLoading(true);  // ローディング状態をtrueに設定
-    fetch('https://shogikaisetukun.fly.dev/chatgpt/explain', {
+    fetch('https://shogikaisetukun.com/chatgpt/explain', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const GameBoard = () => {
   };
 
   const uploadImage = (dataURL) => {
-    fetch('https://shogikaisetukun.fly.dev/images', {
+    fetch('https://shogikaisetukun.com/images', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const GameBoard = () => {
       return;
     }
   
-    const appUrl = "https://shogikaisetukun.fly.dev/"; // アプリのURL
+    const appUrl = "https://shogikaisetukun.com/"; // アプリのURL
     const twitterText = `${gameState.response.slice(0, 100)}... ${appUrl} ${imageURL}`;
   
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
