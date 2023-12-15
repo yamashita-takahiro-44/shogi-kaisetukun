@@ -16,7 +16,8 @@
 - Docker: コンテナ化によるアプリケーションのデプロイメントと管理。
 - OpenAI ChatGPT API: 手順に基づいた解説の生成に使用。
 - shogi-player: 将棋盤のインタラクティブな表示に使用。
-- HTML2Canvas: 画像のキャプチャ
+- HTML2Canvas: 画像のキャプチャに使用。
+- Amazon S3: 画像の保存に使用。
 - Google Analytics
 - Fly.io: デプロイに使用。
 
