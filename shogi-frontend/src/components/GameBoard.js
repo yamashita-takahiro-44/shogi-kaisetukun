@@ -99,7 +99,7 @@ const GameBoard = () => {
   
     console.log("Request body:", requestBody);
   
-    fetch('https://shogikaisetukun.fly.dev/chatgpt/explain', {
+    fetch('https://shogikaisetukun.com/chatgpt/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody)
@@ -117,8 +117,9 @@ const GameBoard = () => {
   };
 
   const captureShogiBoard = () => {
-    if (shogiRef.current) {
-      html2canvas(shogiRef.current)
+    const captureArea = document.getElementById("capture-area"); // キャプチャする範囲を指定
+    if (captureArea) {
+      html2canvas(captureArea)
         .then(canvas => {
           const dataURL = canvas.toDataURL('image/png');
           uploadImage(dataURL);
@@ -129,8 +130,9 @@ const GameBoard = () => {
     }
   };
 
+
   const uploadImage = (dataURL) => {
-    fetch('https://shogikaisetukun.fly.dev/images', {
+    fetch('https://shogikaisetukun.com/images', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: dataURL })
@@ -160,22 +162,25 @@ const GameBoard = () => {
   return (
     <div>
       <input type="file" onChange={handleFileChange} />
-      <shogi-player-wc
-        ref={shogiRef}
-        sp_controller="true" // コントローラを常に表示
-        sp_illegal_cancel="true"
-        sp_slider={spMode !== "play"} // 再生モードのみスライダーを表示
-      ></shogi-player-wc>
-      <div className="explanation-container">
-        <button className="explain-button" onClick={handleExplain} disabled={isLoading}>{isLoading ? '検討中...' : '解説'}</button>
-        <button className="capture-button" onClick={captureShogiBoard}>キャプチャ</button>
-        <button className="twitter-share-button" onClick={handleTwitterShare}>Twitterで共有</button>
-        <div className="explanation">
-          {isLoading ? <p>検討中です...</p> : gameState.response ? <p>{gameState.response}</p> : <p>解説はまだありません</p>}
+      <div id="capture-area">
+        <shogi-player-wc
+          ref={shogiRef}
+          sp_controller="true" // コントローラを常に表示
+          sp_illegal_cancel="true"
+          sp_slider={spMode !== "play"} // 再生モードのみスライダーを表示
+        ></shogi-player-wc>
+        <div className="explanation-container">
+          <button className="explain-button" onClick={handleExplain} disabled={isLoading}>{isLoading ? '検討中...' : '解説'}</button>
+          <button className="capture-button" onClick={captureShogiBoard}>キャプチャ</button>
+          <button className="twitter-share-button" onClick={handleTwitterShare}>Twitterで共有</button>
+          <div className="explanation">
+            {isLoading ? <p>検討中です...</p> : gameState.response ? <p>{gameState.response}</p> : <p>解説はまだありません</p>}
+          </div>
         </div>
       </div>
     </div>
   );
-};
+
+  }
 
 export default GameBoard;
