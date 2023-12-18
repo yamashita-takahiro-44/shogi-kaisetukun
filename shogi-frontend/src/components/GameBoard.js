@@ -106,7 +106,7 @@ const GameBoard = () => {
     })
     .then(response => response.json())
     .then(data => {
-      const explanationText = data.choices[0].text;
+      const explanationText = data.choices[0].message.content;
       setGameState({ ...gameState, response: explanationText });
       setIsLoading(false);
     })
