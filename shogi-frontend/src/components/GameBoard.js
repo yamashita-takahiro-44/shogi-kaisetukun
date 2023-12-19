@@ -117,22 +117,29 @@ const GameBoard = () => {
   };
 
   const captureShogiBoard = () => {
-    const captureArea = document.getElementById("capture-area"); // キャプチャする範囲を指定
-    if (captureArea) {
-      html2canvas(captureArea)
-        .then(canvas => {
-          const dataURL = canvas.toDataURL('image/png');
-          uploadImage(dataURL);
-        })
-        .catch(error => {
-          console.error('キャプチャに失敗しました: ', error);
-        });
-    }
+    return new Promise((resolve, reject) => {
+      const captureArea = document.getElementById("capture-area");
+      if (captureArea) {
+        html2canvas(captureArea)
+          .then(canvas => {
+            const dataURL = canvas.toDataURL('image/png');
+            return uploadImage(dataURL);
+          })
+          .then(imageURL => { // imageURL をここで受け取る
+            resolve(imageURL);
+          })
+          .catch(error => {
+            console.error('キャプチャに失敗しました: ', error);
+            reject(error);
+          });
+      } else {
+        reject('キャプチャエリアが見つかりません。');
+      }
+    });
   };
-
-
+  
   const uploadImage = (dataURL) => {
-    fetch('https://shogikaisetukun.com/images', {
+    return fetch('https://shogikaisetukun.com/images', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: dataURL })
@@ -140,39 +147,46 @@ const GameBoard = () => {
     .then(response => response.json())
     .then(data => {
       setImageURL(data.imageUrl);
-    })
-    .catch(error => {
-      console.error('Error:', error);
+      return data.imageUrl; // ここで imageURL を返す
     });
   };
-
-  const handleTwitterShare = () => {
-    if (!imageURL) {
-      alert('まず将棋盤をキャプチャしてください。');
-      return;
-    }
-
+  
+  const handleTwitterShare = (imageURL) => { // imageURL を引数として受け取る
     const appUrl = "https://shogikaisetukun.com/";
     const twitterText = `${gameState.response.slice(0, 100)}... ${appUrl} ${imageURL}`;
-
+  
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
     window.open(twitterUrl, '_blank');
   };
+  
+  const handleCaptureAndShare = () => {
+    captureShogiBoard()
+      .then(imageURL => { // captureShogiBoard から imageURL を受け取る
+        handleTwitterShare(imageURL);
+      })
+      .catch(error => {
+        console.error('キャプチャまたは共有に問題が発生しました: ', error);
+      });
+  };
+  
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
+      <div class="file-input-container">
+        <input type="file" onChange={handleFileChange} />
+      </div>
       <div id="capture-area">
+      <div className="shogi-player-container">
         <shogi-player-wc
           ref={shogiRef}
           sp_controller="true" // コントローラを常に表示
           sp_illegal_cancel="true"
           sp_slider={spMode !== "play"} // 再生モードのみスライダーを表示
         ></shogi-player-wc>
+      </div>
         <div className="explanation-container">
           <button className="explain-button" onClick={handleExplain} disabled={isLoading}>{isLoading ? '検討中...' : '解説'}</button>
-          <button className="capture-button" onClick={captureShogiBoard}>キャプチャ</button>
-          <button className="twitter-share-button" onClick={handleTwitterShare}>Twitterで共有</button>
+          <button className="twitter-share-button" onClick={handleCaptureAndShare}>Twitterで共有</button>
           <div className="explanation">
             {isLoading ? <p>検討中です...</p> : gameState.response ? <p>{gameState.response}</p> : <p>解説はまだありません</p>}
           </div>
