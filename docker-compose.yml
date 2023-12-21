@@ -7,6 +7,8 @@ services:
       - ./shogi-api:/shogi-api
     ports:
       - "3000:3000"
+    env_file:
+      - ./shogi-api/.env
   frontend:
     build: ./shogi-frontend
     volumes:
