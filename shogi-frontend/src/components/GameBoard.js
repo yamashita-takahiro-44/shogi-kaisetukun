@@ -33,7 +33,7 @@ const GameBoard = () => {
 
    // プロンプトの選択肢
    const prompts = [
-    { label: "解説者", value: "解説者" },
+    { label: "解説者風/ドロップダウンから別パターンも選べます", value: "解説者" },
     { label: "豊川先生風", value: "豊川先生風" },
     { label: "格ゲー実況風", value: "格ゲー実況風" },
     { label: "デーモン閣下風", value: "デーモン閣下風" },
@@ -226,7 +226,7 @@ const GameBoard = () => {
       <div id="capture-area">
       <div className="dropdown-container">
       <select value={selectedKifu} onChange={handleKifuChange}>
-          <option value="">棋譜を選択</option>
+          <option value="">操作モード/ドロップダウンから棋譜を選択可</option>
           {kifuPresets.map(kifu => (
             <option key={kifu.name} value={kifu.name}>{kifu.name}</option>
           ))}
