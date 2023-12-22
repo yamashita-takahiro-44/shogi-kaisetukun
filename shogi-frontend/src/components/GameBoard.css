@@ -3,26 +3,14 @@
   margin-top: 20px;
 }
 
-.explain-button {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  cursor: pointer;
-}
-
-.capture-button {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  cursor: pointer;
-}
-
-.twitter-share-button {
+.explain-button, .post-to-board-button, .twitter-share-button {
   padding: 10px 20px;
   font-size: 1.2em;
   cursor: pointer;
 }
 
 .explanation {
-  border: 2px solid #ddd;
+  border: 2px solid #000000;
   padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -35,20 +23,66 @@
   display: flex;
   justify-content: center;
 }
+
 shogi-player-wc {
   flex-basis: 640px;
 }
 
-.file-input-container {
+.file-input-container, .dropdown-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 60px;
 }
 
-.dropdown-container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px;
+/* 和風のデザイン要素 */
+.content {
+  background-image: url('wood-texture.jpg');
+  background-size: cover;
+}
+
+.header, .footer {
+  background-color: #333;
+  color: #fff;
+}
+
+.dropdown-container select {
+  border: 1px solid #333;
+  background-color: #fff;
+  color: #333;
+}
+
+.button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+}
+
+.text {
+  color: #333;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.instructions {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.instructions h2 {
+  margin-top: 0;
+}
+
+.instructions p {
+  line-height: 1.6;
 }

@@ -52,23 +52,3 @@
     transform: rotate(360deg);
   }
 }
-
-.instructions {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-.instructions h2 {
-  margin-top: 0;
-}
-
-.instructions p {
-  line-height: 1.6;
-}

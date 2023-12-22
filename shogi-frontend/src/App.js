@@ -1,7 +1,11 @@
 import React, { useRef, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // `Routes`をインポート
 import { GameStateProvider } from './components/GameStateContext';
 import GameBoard from './components/GameBoard';
-import './App.css'; // カスタムCSS
+import HomePage from './components/HomePage';
+import ImageBoardPage from './components/ImageBoardPage';
+import RankingPage from './components/RankingPage';
+import './App.css';
 
 function App() {
   const spRef = useRef(null);
@@ -16,21 +20,21 @@ function App() {
 
   return (
     <GameStateProvider>
-      <div className="App container">
-        <h1 className="app-title">将棋解説くん</h1>
-        {/* 説明文の追加 */}
-        <div className="instructions">
-          <h2>使い方</h2>
-          <p>
-            棋譜を下のフォームからアップロード（.kifと.sfenに対応）<br />
-            あるいは盤面を一手ずつ動かしてください。<br />
-            解説ボタンを押してください。将棋解説くんが一生懸命解説します。<br />
-            twitterで共有して楽しんでください。<br />
-            棋譜プリセット、GPTのバージョン、プロンプトも選べます。
-          </p>
+      <Router>
+        <div className="App container">
+          <h1 className="app-title">将棋解説くん</h1>
+          <Routes> 
+            <Route path="/" element={<HomePage />} /> 
+            <Route path="/game" element={(
+              <div>
+                <GameBoard spRef={spRef} />
+              </div>
+            )} />
+            <Route path="/imageboard" element={<ImageBoardPage />} />
+            <Route path="/ranking" element={<RankingPage />} />
+          </Routes>
         </div>
-        <GameBoard spRef={spRef} />
-      </div>
+      </Router>
     </GameStateProvider>
   );
 }
