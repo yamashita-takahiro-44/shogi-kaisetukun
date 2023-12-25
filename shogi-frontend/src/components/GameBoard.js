@@ -151,7 +151,7 @@ const GameBoard = () => {
       selectedPromptType
     };
   
-    fetch('https://shogikaisetukun.com/chatgpt/explain', {
+    fetch('https://shogikaisetukun.com/chatgpt/api/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody)
@@ -169,7 +169,6 @@ const GameBoard = () => {
     });
   };
   
-
   const captureShogiBoard = () => {
     return new Promise((resolve, reject) => {
       const captureArea = document.getElementById("capture-area");
@@ -193,7 +192,7 @@ const GameBoard = () => {
   };
   
   const uploadImage = (dataURL) => {
-    return fetch('https://shogikaisetukun.com/images', {
+    return fetch('https://shogikaisetukun.com/api/images', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: dataURL })
@@ -226,15 +225,20 @@ const GameBoard = () => {
   const postToImageBoard = () => {
     captureShogiBoard()
       .then(imageURL => {
-        // 画像掲示板に画像を投稿する処理
-        fetch('https://shogikaisetukun.com/imageboard/post', {
+        fetch('https://shogikaisetukun.com/api/images', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: imageURL })
         })
-        .then(response => response.json())
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('サーバーでエラーが発生しました。');
+          }
+        })
         .then(data => {
-          if (data.success) {
+          if (data.imageUrl) {
             message.success('画像が掲示板に投稿されました！');
           } else {
             message.error('投稿に失敗しました。');
@@ -250,6 +254,7 @@ const GameBoard = () => {
         message.error('画像のキャプチャに失敗しました。');
       });
   };
+  
 
 return (
   <Layout className="layout">

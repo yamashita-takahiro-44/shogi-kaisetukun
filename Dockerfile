@@ -1,52 +1,55 @@
-# Stage 1: Build the Rails API
-FROM ruby:3.2.2 AS api-builder
-WORKDIR /app
-
-# Install system dependencies
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
-
-# Set bundle path
-ENV BUNDLE_PATH /usr/local/bundle
-
-# Copy Gemfile and Gemfile.lock
-COPY shogi-api/Gemfile shogi-api/Gemfile.lock ./
-
-# Install gems
-RUN gem install bundler && bundle install --deployment
-
-# Copy the rest of the Rails app
-COPY shogi-api .
-
-# Stage 2: Build the React Frontend
+# Stage 1: Build the React Frontend
 FROM node:20.5.1 AS frontend-builder
 WORKDIR /frontend
-
-# Copy Frontend files
 COPY shogi-frontend/package.json shogi-frontend/package-lock.json ./
 RUN npm install
 COPY shogi-frontend .
 RUN npm run build
 
-# Stage 3: Final Image
-FROM ruby:3.2.2
+# Stage 2: Build the Rails API
+FROM ruby:3.2.2 AS api-builder
+WORKDIR /app/api
+COPY shogi-api/Gemfile shogi-api/Gemfile.lock ./
+RUN gem install bundler -v '2.4.22'
+RUN bundle install --deployment
+COPY shogi-api .
+
+# Stage 3: Setup Nginx with Frontend and API
+FROM nginx:alpine
 WORKDIR /app
 
-# Set bundle path and add /usr/local/bundle/bin to PATH
-ENV BUNDLE_PATH /usr/local/bundle
-ENV PATH /usr/local/bundle/bin:$PATH
+# 必要な依存関係をインストール
+RUN apk add --no-cache build-base openssl-dev zlib-dev yaml-dev ruby-dev postgresql-dev
 
-# Install system dependencies
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs npm
-RUN npm install --global yarn
+# Rubyのソースからインストール
+RUN wget -O ruby.tar.gz "https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz" \
+    && tar -xzf ruby.tar.gz \
+    && cd ruby-3.2.2 \
+    && ./configure --disable-install-doc \
+    && make \
+    && make install
 
-# Copy API from api-builder
-COPY --from=api-builder /app /app
+# Bundlerのインストール
+RUN gem install bundler -v '2.4.22'
 
-# Install gems
-RUN bundle install
+# Copy from previous stages
+COPY --from=frontend-builder /frontend/build /usr/share/nginx/html
+COPY --from=api-builder /app/api /app/api
 
-# Copy built frontend assets
-COPY --from=frontend-builder /frontend/build /app/public
+# Bundlerを使用してGemをインストール (deployment flagを設定)
+RUN cd /app/api && bundle config set --local deployment 'true' && bundle install
 
-# Set the startup command
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]
+# Nginxの設定ファイルをコピー
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# start.shスクリプトをコピーして実行可能にする
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# ENV PATHを更新してBundlerのパスを確認
+ENV PATH="/app/api/vendor/bundle/ruby/3.2.0/bin:/usr/local/bin:$PATH"
+RUN echo $PATH && which bundle
+
+# ポートとCMDを設定
+EXPOSE 8080
+CMD ["/start.sh"]

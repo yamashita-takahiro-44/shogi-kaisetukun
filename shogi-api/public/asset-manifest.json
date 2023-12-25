@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4bb04b03.css",
+    "main.js": "/static/js/main.c3b9e949.js",
+    "static/js/496.36669b44.chunk.js": "/static/js/496.36669b44.chunk.js",
+    "static/media/wood-texture.jpg": "/static/media/wood-texture.dee11ae8df5f5a882623.jpg",
+    "index.html": "/index.html",
+    "main.4bb04b03.css.map": "/static/css/main.4bb04b03.css.map",
+    "main.c3b9e949.js.map": "/static/js/main.c3b9e949.js.map",
+    "496.36669b44.chunk.js.map": "/static/js/496.36669b44.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4bb04b03.css",
+    "static/js/main.c3b9e949.js"
+  ]
+}

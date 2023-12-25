@@ -1,20 +1,23 @@
-# fly.toml app configuration file generated for shogikaisetukun on 2023-12-14T21:36:01+09:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
 app = "shogikaisetukun"
 primary_region = "nrt"
 
 [build]
+  dockerfile = "Dockerfile"
+  builder = "paketobuildpacks/builder:base"
 
-[http_service]
+[[services]]
+  http_checks = []
   internal_port = 8080
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
   processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+
+[env]
+RAILS_ENV = "production"
+
+[[statics]]
+guest_path = "/usr/share/nginx/html"
+url_prefix = "/"
 
 [[vm]]
   cpu_kind = "shared"

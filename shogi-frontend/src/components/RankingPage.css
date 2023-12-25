@@ -1,0 +1,31 @@
+/* 基本のレイアウト（モバイルデバイス用） */
+.ranking-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ranking-board .card {
+  width: 90%; /* モバイルデバイスではカードを大きく表示 */
+  margin: 10px 0;
+}
+
+/* 中サイズの画面（タブレットなど）で2列表示 */
+@media (min-width: 600px) {
+  .ranking-board {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .ranking-board .card {
+    width: calc(50% - 20px); /* 2列のための幅 */
+  }
+}
+
+/* 大サイズの画面（デスクトップなど）で3列表示 */
+@media (min-width: 1024px) {
+  .ranking-board .card {
+    width: calc(33% - 20px); /* 3列のための幅 */
+  }
+}

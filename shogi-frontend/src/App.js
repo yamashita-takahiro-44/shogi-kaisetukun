@@ -5,6 +5,7 @@ import GameBoard from './components/GameBoard';
 import HomePage from './components/HomePage';
 import ImageBoardPage from './components/ImageBoardPage';
 import RankingPage from './components/RankingPage';
+import AdminPage from './components/AdminPage';
 import './App.css';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             )} />
             <Route path="/imageboard" element={<ImageBoardPage />} />
             <Route path="/ranking" element={<RankingPage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </div>
       </Router>

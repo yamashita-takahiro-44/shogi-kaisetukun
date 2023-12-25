@@ -1,7 +1,9 @@
+# Dockerfile.rails
 FROM ruby:3.2.2
 
 RUN apt-get update -qq && apt-get install -y nodejs npm
 RUN npm install --global yarn
+
 RUN mkdir /shogi-api
 WORKDIR /shogi-api
 
@@ -11,4 +13,6 @@ RUN bundle install
 
 COPY . /shogi-api
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+EXPOSE 3000
+
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
