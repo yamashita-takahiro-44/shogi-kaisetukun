@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Modal } from 'antd';
+import { Card, Modal, List } from 'antd';
 import { Layout, Menu } from 'antd';
 import './RankingPage.css';
 
@@ -10,10 +10,11 @@ const RankingPage = () => {
   const [rankedImages, setRankedImages] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState('');
-  const [likedImages, setLikedImages] = useState({});
+  const [modalImageId, setModalImageId] = useState(null);
+  const [comments, setComments] = useState({});
 
   useEffect(() => {
-    fetch('https://shogikaisetukun.com/api/images/ranking')
+    fetch('https://shogikaisetukun.fly.dev/api/images/ranking')
       .then(response => response.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -27,13 +28,26 @@ const RankingPage = () => {
       });
   }, []);
 
-  const showModal = (imageUrl) => {
+  const showModal = (imageUrl, imageId) => {
     setModalImageUrl(imageUrl);
+    setModalImageId(imageId);
     setIsModalVisible(true);
+    fetchComments(imageId);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const fetchComments = (imageId) => {
+    fetch(`https://shogikaisetukun.fly.dev/api/images/${imageId}/comments`)
+      .then(response => response.json())
+      .then(data => {
+        setComments({ ...comments, [imageId]: data });
+      })
+      .catch(error => {
+        console.error('コメントの取得に失敗しました:', error);
+      });
   };
 
   return (
@@ -48,8 +62,8 @@ const RankingPage = () => {
             <Link to="/game">ゲーム</Link>
           </Menu.Item>
           <Menu.Item key="3">
-              <Link to="/imageboard">画像掲示板</Link>
-            </Menu.Item>
+            <Link to="/imageboard">画像掲示板</Link>
+          </Menu.Item>
           <Menu.Item key="4">
             <Link to="/ranking">ランキング</Link>
           </Menu.Item>
@@ -63,7 +77,7 @@ const RankingPage = () => {
               key={image.id}
               hoverable
               style={{ width: 240, margin: '16px' }}
-              cover={<img alt={`ランキング${index + 1}位`} src={image.url} onClick={() => showModal(image.url)} />}
+              cover={<img alt={`ランキング${index + 1}位`} src={image.url} onClick={() => showModal(image.url, image.id)} />}
             >
               <p>いいね数: {image.likes}</p>
             </Card>
@@ -72,6 +86,10 @@ const RankingPage = () => {
       </div>
       <Modal open={isModalVisible} footer={null} onCancel={handleCancel}>
         <img alt="Enlarged" src={modalImageUrl} style={{ width: '100%' }} />
+        <List
+          dataSource={comments[modalImageId] || []}
+          renderItem={item => <List.Item>{item.content}</List.Item>}
+        />
       </Modal>
       <Footer style={{ textAlign: 'center' }}>将棋解説くん ©2023 Created by yamashita twitter:@yamashita-44</Footer>
     </Layout>

@@ -1,18 +1,21 @@
-app = "shogikaisetukun-api"
+app = "shogikaisetukun"
 primary_region = "nrt"
+
+[build]
+  dockerfile = "Dockerfile"
 
 [[services]]
   internal_port = 3000
   protocol = "tcp"
 
-  [services.concurrency]
-    hard_limit = 50
-    soft_limit = 25
-
   [[services.ports]]
-    handlers = ["http"]
-    port = 3000
+  handlers = ["tls", "http"]
+  port = 443
 
-  [[services.tcp_checks]]
-    interval = 10000
-    timeout = 2000
+[env]
+RAILS_ENV = "production"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 1024

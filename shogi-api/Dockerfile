@@ -1,18 +1,28 @@
-# Dockerfile.rails
+# ベースイメージ
 FROM ruby:3.2.2
 
-RUN apt-get update -qq && apt-get install -y nodejs npm
-RUN npm install --global yarn
+# 必要な依存関係をインストール
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
-RUN mkdir /shogi-api
-WORKDIR /shogi-api
+# アプリケーションディレクトリを作成
+WORKDIR /app
 
-COPY Gemfile /shogi-api/Gemfile
-COPY Gemfile.lock /shogi-api/Gemfile.lock
+# GemfileとGemfile.lockをコピー
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
+
+# Bundlerを使用してGemをインストール
+RUN gem install bundler -v '2.4.22'
 RUN bundle install
 
-COPY . /shogi-api
+# アプリケーションのソースコードをコピー
+COPY . /app
 
+# プロダクション環境変数を設定
+ENV RAILS_ENV=production
+
+# ポートを設定
 EXPOSE 3000
 
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+# Railsサーバーを起動
+CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]

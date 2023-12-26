@@ -1,3 +1,4 @@
+module Api
 class ImagesController < ApplicationController
   before_action :authenticate, only: [:destroy]
 
@@ -68,4 +69,5 @@ class ImagesController < ApplicationController
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
+end
 end

@@ -151,7 +151,7 @@ const GameBoard = () => {
       selectedPromptType
     };
   
-    fetch('https://shogikaisetukun.com/api/chatgpt/explain', {
+    fetch('https://shogikaisetukun.fly.dev/api/chatgpt/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody)
@@ -192,7 +192,7 @@ const GameBoard = () => {
   };
   
   const uploadImage = (dataURL) => {
-    return fetch('https://shogikaisetukun.com/api/images', {
+    return fetch('https://shogikaisetukun.fly.dev/api/images', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: dataURL })
@@ -225,7 +225,7 @@ const GameBoard = () => {
   const postToImageBoard = () => {
     captureShogiBoard()
       .then(imageURL => {
-        fetch('https://shogikaisetukun.com/api/images', {
+        fetch('https://shogikaisetukun.fly.dev/api/images', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: imageURL })

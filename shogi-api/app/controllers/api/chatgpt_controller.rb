@@ -1,3 +1,4 @@
+module Api
 class ChatgptController < ApplicationController
   require 'net/http'
   require 'uri'
@@ -91,4 +92,5 @@ Rails.logger.info "API Response: #{response.body}"
       render json: { error: e.message }, status: :internal_server_error
     end
   end
+end
 end
