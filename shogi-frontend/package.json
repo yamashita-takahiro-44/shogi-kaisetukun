@@ -1,6 +1,7 @@
 {
   "name": "shogi-frontend",
   "version": "1.0.0",
+  "proxy": "https://shogikaisetukun.com",
   "main": "index.js",
   "dependencies": {
     "antd": "^5.12.4",

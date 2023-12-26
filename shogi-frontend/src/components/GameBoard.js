@@ -151,7 +151,7 @@ const GameBoard = () => {
       selectedPromptType
     };
   
-    fetch('https://shogikaisetukun.com/chatgpt/api/explain', {
+    fetch('https://shogikaisetukun.com/api/chatgpt/explain', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody)
